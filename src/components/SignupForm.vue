@@ -1,47 +1,57 @@
 <template>
-  <form>
-    <label>User:</label>
-    <input type="text" v-model="name" required />
+<!-- wrap everything in a div container -->
+  <div>
+    <form>
+      <!-- input fields -->
+      <label>User:</label>
+      <input type="text" v-model="name" required />
 
-    <label>Email:</label>
-    <input type="email" v-model="email" required />
+      <label>Email:</label>
+      <input type="email" v-model="email" required />
 
-    <label>Password:</label>
-    <input type="password" v-model="password" required />
+      <label>Password:</label>
+      <input type="password" v-model="password" required />
+      <!-- multiple checkbox -->
+      <div>
+        <input v-model="traits" type="checkbox" value="Analytical" />
+        <label>Analytical</label>
+      </div>
 
-    <div>
-      <input v-model="traits" type="checkbox" value="Analytical" required />
-      <label>Analytical</label>
-    </div>
+      <div>
+        <input v-model="traits" type="checkbox" value="Book-worm" />
+        <label>Book-worm</label>
+      </div>
 
-    <div>
-      <input v-model="traits" type="checkbox" value="Book-worm" required />
-      <label>Book-worm</label>
-    </div>
+      <div>
+        <input v-model="traits" type="checkbox" value="Workhorse" />
+        <label>Workhorse</label>
+      </div>
+      <!-- select box -->
+      <label>Role:</label><br />
+      <select v-model="role">
+        <option value="developer">Web Developer</option>
+        <option value="designer">Web Designer</option>
+      </select>
+      <!-- checkbox -->
+      <div class="terms">
+        <input v-model="terms" type="checkbox" required />
+        <label>Accept terms and conditions</label>
+      </div>
 
-    <div>
-      <input v-model="traits" type="checkbox" value="Workhorse" required />
-      <label>Workhorse</label>
-    </div>
+      <label>Skills:</label>
+      <input type="text" v-model="tempSkill" @keyup="addSkill" />
+    </form>
 
-    <label>Role:</label><br />
-    <select v-model="role">
-      <option value="developer">Web Developer</option>
-      <option value="designer">Web Designer</option>
-    </select>
+    <p>
+      User: {{ name }} <br />
+      Email: {{ email }} <br />
+      Password: {{ password }} <br />
+      Role: {{ role }} <br />
+      Terms: {{ terms }} <br />
+      Traits: {{ traits }} <br />
+    </p>
 
-    <div class="terms">
-      <input v-model="terms" type="checkbox" required />
-      <label>Accept terms and conditions</label>
-    </div>
-  </form>
-  <p>
-    User: {{ name }} <br />
-    Email: {{ email }} <br />
-    Password: {{ password }} <br />
-    Role: {{ role }} <br />
-    Terms: {{ terms }} <br />
-  </p>
+  </div>
 </template>
 
 <script>
@@ -53,8 +63,18 @@ export default {
       name: "",
       role: "",
       terms: false,
-      traits: []
+      traits: [],
+      tempSkill: "",
+      skills: [],
     };
+  },
+  methods: {
+    addSkill(e) {
+      if (e.key === "," && this.tempSkill) {
+        this.skills.push(this.tempSkill);
+        this.tempSkill = "";
+      }
+    },
   },
 };
 </script>
