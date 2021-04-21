@@ -26,10 +26,6 @@ body{
   margin:0;
   padding:0;
   background: #eee;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 </style>

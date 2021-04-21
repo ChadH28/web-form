@@ -1,7 +1,8 @@
 <template>
-<!-- wrap everything in a div container -->
+  <!-- wrap everything in a div container -->
   <div>
-    <form>
+    <p id="alert"></p>
+    <form @submit.prevent="handleSubmit">
       <!-- input fields -->
       <label>User:</label>
       <input type="text" v-model="name" required />
@@ -11,6 +12,9 @@
 
       <label>Password:</label>
       <input type="password" v-model="password" required />
+      <div v-if="passwordError" id="error">
+        {{passwordError}}
+      </div>
       <!-- multiple checkbox -->
       <div>
         <input v-model="traits" type="checkbox" value="Analytical" />
@@ -40,8 +44,19 @@
 
       <label>Skills:</label>
       <input type="text" v-model="tempSkill" @keyup="addSkill" />
+      <!-- looping through skills list  -->
+      <!-- :key must be unique -->
+      <div v-for="skill in skills" :key="skill" class="badge">
+        <span @click="deleteSkill(skill)">{{skill}}</span>
+      </div>
+
+      <div class="submit">
+        <button>Create an account </button>
+      </div>
     </form>
 
+    <div class="output">
+      <h1>Output</h1>
     <p>
       User: {{ name }} <br />
       Email: {{ email }} <br />
@@ -50,7 +65,7 @@
       Terms: {{ terms }} <br />
       Traits: {{ traits }} <br />
     </p>
-
+    </div>
   </div>
 </template>
 
@@ -66,21 +81,44 @@ export default {
       traits: [],
       tempSkill: "",
       skills: [],
+      passwordError: ''
     };
   },
   methods: {
     addSkill(e) {
-      if (e.key === "," && this.tempSkill) {
-        this.skills.push(this.tempSkill);
+      if (e.key === "Enter" && this.tempSkill ) {
+        // statement checks whether if theres duplicates or not
+        if(!this.skills.includes(this.tempSkill)) {
+          this.skills.push(this.tempSkill);
+        }
         this.tempSkill = "";
       }
     },
+    deleteSkill(skill) {
+        this.skills = this.skills.filter((i) => {
+          return skill !== i
+        })
+    },
+  handleSubmit() {
+    document.getElementById('alert').innerHTML = 'form submitted'
+    // password validation
+    this.passwordError = this.password.length > 5 ? '' : 'Must be atleast 5 characters long' 
+  
+    if(!this.passwordError) {
+      console.log('email', this.email)
+      console.log('password', this.password)
+      console.log('role', this.role)
+      console.log('skills', this.skills)
+      console.log('terms accepted', this.terms)
+    }
+  }
   },
 };
 </script>
 
 <style>
-form {
+form,
+.output {
   max-width: 450px;
   width: 400px;
   margin: 30px auto;
@@ -89,6 +127,10 @@ form {
   text-align: left;
   padding: 40px;
   border-radius: 12px;
+}
+
+.output p{
+  padding-bottom:20px;
 }
 
 label {
@@ -120,4 +162,59 @@ input[type="checkbox"] {
   position: relative;
   top: 2px;
 }
+
+.badge {
+  padding: 10px;
+  margin: 10px 5px;
+  background: cadetblue;
+  border: none;
+  border-radius: 25px ;
+  cursor: pointer;
+  font-weight: bold;
+  box-sizing: border-box;
+  font-size: 12px; 
+  display: inline-block;
+}
+
+.badge:hover{
+  opacity: 0.8
+}
+
+button{
+  background: cadetblue;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+}
+button:hover{
+  opacity: 0.8;
+}
+
+.submit{
+  text-align: center;
+  margin: 10px auto;
+}
+
+#alert{
+  background: chartreuse;
+  padding: 20px 10px;
+  margin: 10px auto;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  font-size: 20px;
+  color:white;
+}
+
+#error{
+    background: rgba(255, 99, 71, 0.6);
+    color: white;
+    padding: 10px 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
 </style>
